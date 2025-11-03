@@ -168,12 +168,16 @@ cd ~/trimsoftstudio.com/iqcheck
 
 ### Step 3 or 4: Create Node.js App First
 
+**⚠️ CRITICAL: Make sure you select Node.js 18.x or 20.x!**
+
 **If npm is not found, create Node.js App first - this sets up the environment!**
 
 1. **Click "Setup Node.js App"** (in Software section)
 2. **Click "Create Application"** button
 3. **Configure:**
-   - **Node.js Version**: Select **18.x** or **20.x** (highest available)
+   - **Node.js Version**: **MUST BE 18.x or 20.x** (DO NOT use 10.x or 16.x)
+     - ❌ **DO NOT SELECT**: Node.js 10.x (too old - won't work!)
+     - ✅ **SELECT**: Node.js 18.x or 20.x (required by Next.js and Prisma)
    - **Application Mode**: **Production**
    - **Application Root**: `/home/rungrezc/trimsoftstudio.com/iqcheck`
    - **Application URL**: 
@@ -183,6 +187,10 @@ cd ~/trimsoftstudio.com/iqcheck
 4. **Click "Create"**
 
 **After creating the app, Node.js and npm will be available in Terminal!**
+
+**If you already created the app with Node.js 10:**
+1. **Delete the existing app** in "Setup Node.js App"
+2. **Create a new one** with Node.js 18.x or 20.x
 
 Now run install (if you skipped Step 3):
 ```bash
@@ -271,9 +279,15 @@ After deployment, your app will be available at:
 - After creating the app, npm will be available in Terminal
 - See `CPANEL_NPM_FIX.md` for detailed solutions
 
+**"Unsupported engine" or "SyntaxError: Unexpected token ?"?** ✅ FIXED
+- **Problem**: You're using Node.js 10.x - it's too old!
+- **Solution**: **Update Node.js app to version 18.x or 20.x** (NOT 10.x!)
+- Delete existing app and recreate with correct Node.js version
+- See `CPANEL_NODE_VERSION_FIX.md` for detailed fix
+
 **Build fails?**
-- Make sure Node.js version is 16+ (18+ recommended)
-- Check Terminal for error messages
+- **CRITICAL**: Make sure Node.js version is **18.x or 20.x** (NOT 10.x or 16.x!)
+- Check Terminal for error messages: `node --version` should show v18+ or v20+
 - Make sure you ran `npm install` first
 
 **Database permissions?**
