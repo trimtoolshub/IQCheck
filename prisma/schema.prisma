@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Application models
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TestStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  STRIPE
+  JAZZCASH
+  EASYPaisa
+  PAKPAY
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  testSessions  TestSession[]
+  answers       Answer[]
+  payments      Payment[]
+}
+
+// NextAuth models (compatible with Prisma Adapter)
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Question {
+  id             String   @id @default(cuid())
+  text           String
+  domain         String   // e.g., "IQ", "OCD", or other suggested categories
+  difficulty     Int      // 1-5
+  optionsJson    String   // JSON of options
+  correctOption  String   // e.g., "A"
+  tagsJson       String   // JSON array of topic tags
+  explanation    String?  // Explanation of the correct answer
+  exposureCount  Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  answers        Answer[]
+}
+
+model TestSession {
+  id             String      @id @default(cuid())
+  userId         String?
+  email          String?     // Email collected for report access
+  status         TestStatus  @default(DRAFT)
+  countryCode    String?     // for pricing logic
+  currency       String?     // ISO 3-letter
+  priceCents     Int?        // price charged for detailed report
+  paid           Boolean     @default(false)
+  unlocked       Boolean     @default(false) // Unlocked via share/ads/payment
+  shareCount     Int         @default(0) // Number of friends shared with
+  adViews        Int         @default(0) // Number of ads watched
+  scoreIQ        Int?
+  scoreOCD       Int?
+  engineState    String?     // JSON snapshot to resume adaptive engine
+  startedAt      DateTime    @default(now())
+  completedAt    DateTime?
+
+  user           User?       @relation(fields: [userId], references: [id])
+  answers        Answer[]
+  payment        Payment?
+  adViews_record  AdView[]
+  shares          Share[]
+  emails          Email[]
+}
+
+model Answer {
+  id             String      @id @default(cuid())
+  userId         String?
+  testSessionId  String
+  questionId     String
+  selectedOption String
+  correct        Boolean
+  responseTimeMs Int
+  createdAt      DateTime    @default(now())
+
+  user       User?       @relation(fields: [userId], references: [id])
+  session    TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+  question   Question    @relation(fields: [questionId], references: [id])
+}
+
+model Payment {
+  id            String          @id @default(cuid())
+  testSessionId String          @unique
+  userId        String?
+  provider      PaymentProvider
+  status        PaymentStatus   @default(PENDING)
+  amountCents   Int
+  currency      String
+  externalId    String?         // Stripe payment_intent id or provider ref
+  receiptUrl    String?
+  createdAt     DateTime        @default(now())
+
+  user       User?       @relation(fields: [userId], references: [id])
+  session    TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   // store encrypted/obfuscated in prod; plain for demo
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdView {
+  id            String      @id @default(cuid())
+  testSessionId String
+  adProvider    String      // e.g., "google", "facebook"
+  revenueCents Int         // Revenue earned from this ad view
+  createdAt     DateTime    @default(now())
+
+  session       TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+}
+
+model Share {
+  id            String      @id @default(cuid())
+  testSessionId String
+  platform     String      // "facebook", "instagram", "link"
+  sharedWith   String?     // Email or identifier of person shared with
+  createdAt     DateTime    @default(now())
+
+  session       TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+}
+
+model Email {
+  id            String      @id @default(cuid())
+  email         String      @unique
+  testSessionId String?
+  source        String      // "report_unlock", "share", "payment"
+  subscribed    Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  session       TestSession? @relation(fields: [testSessionId], references: [id], onDelete: SetNull)
+}
