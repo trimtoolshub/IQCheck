@@ -122,14 +122,53 @@ ls -la
 
 ### Step 3: Install Dependencies
 
+**Important:** npm may not be in your PATH. Try these options:
+
+**Option 1: Use Node.js App Environment (Recommended)**
+
+1. **Create Node.js App first** (Step 4 below) - cPanel will set up the environment
+2. **Then in Terminal**, Node.js will be available after creating the app
+
+**Option 2: Find npm Path**
+
 In Terminal:
+```bash
+# Find Node.js installation
+which node
+# or
+whereis node
+
+# If Node.js is installed, find npm:
+which npm
+# or
+find /usr -name npm 2>/dev/null
+```
+
+**Option 3: Create Node.js App First (Recommended)**
+
+1. **Skip to Step 4** - Create Node.js App in cPanel first
+2. **cPanel will automatically set up Node.js environment**
+3. **Then come back and run npm install**
+
+After Node.js App is created, in Terminal:
 ```bash
 cd ~/trimsoftstudio.com/iqcheck
 npm install
 npm run build
 ```
 
-### Step 4: Create Node.js App
+**Option 4: Use Full Path (If found)**
+
+If you find npm path (e.g., `/usr/local/bin/npm`):
+```bash
+cd ~/trimsoftstudio.com/iqcheck
+/usr/local/bin/npm install
+/usr/local/bin/npm run build
+```
+
+### Step 3 or 4: Create Node.js App First
+
+**If npm is not found, create Node.js App first - this sets up the environment!**
 
 1. **Click "Setup Node.js App"** (in Software section)
 2. **Click "Create Application"** button
@@ -142,6 +181,15 @@ npm run build
      - Or main domain if configured
    - **Application Startup File**: `server.js`
 4. **Click "Create"**
+
+**After creating the app, Node.js and npm will be available in Terminal!**
+
+Now run install (if you skipped Step 3):
+```bash
+cd ~/trimsoftstudio.com/iqcheck
+npm install
+npm run build
+```
 
 ### Step 5: Set Environment Variables
 
@@ -218,9 +266,15 @@ After deployment, your app will be available at:
 **Can't find "Setup Node.js App"?**
 - Contact your hosting provider to enable Node.js support
 
+**"npm: command not found"?** ✅ FIXED
+- **Solution: Create Node.js App first** (Step 4) - this sets up the environment
+- After creating the app, npm will be available in Terminal
+- See `CPANEL_NPM_FIX.md` for detailed solutions
+
 **Build fails?**
 - Make sure Node.js version is 16+ (18+ recommended)
 - Check Terminal for error messages
+- Make sure you ran `npm install` first
 
 **Database permissions?**
 ```bash
