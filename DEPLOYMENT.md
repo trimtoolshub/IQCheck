@@ -29,19 +29,33 @@ This guide will help you deploy your IQ test app to Vercel using GitHub.
 
 ## Step 2: Set Up Database (Important!)
 
-⚠️ **SQLite won't work on Vercel** - you need a cloud database.
+⚠️ **SQLite won't work on Vercel** - Vercel is serverless and has no persistent file system.
 
-### Option 1: Vercel Postgres (Recommended)
+### Why SQLite Doesn't Work:
+- Serverless functions are stateless
+- No persistent file storage
+- Database file would be lost between requests
+- Multiple functions can't share the same SQLite file
+
+### Option 1: Vercel Postgres (Recommended - Easiest)
 
 1. Go to your Vercel project dashboard
 2. Click on **Storage** tab
 3. Click **Create Database** → **Postgres**
-4. Choose a plan and create
-5. Vercel will automatically provide the connection string
+4. Choose a plan (free tier available)
+5. Vercel will automatically provide the connection string as `DATABASE_URL`
 
-### Option 2: Other Cloud Databases
+### Option 2: Turso (SQLite-Compatible Serverless)
 
-- **Supabase** (Free tier available): https://supabase.com
+If you prefer to keep SQLite compatibility:
+1. Go to https://turso.tech/
+2. Create account and database
+3. Get connection string (SQLite-compatible)
+4. Works with your existing Prisma schema!
+
+### Option 3: Other Cloud Databases
+
+- **Supabase** (Free tier): https://supabase.com
 - **Neon** (Serverless Postgres): https://neon.tech
 - **PlanetScale** (MySQL): https://planetscale.com
 
@@ -49,12 +63,12 @@ After setting up the database, update your `prisma/schema.prisma`:
 
 ```prisma
 datasource db {
-  provider = "postgresql"  // Change from "sqlite"
+  provider = "postgresql"  // Change from "sqlite" (or keep "sqlite" if using Turso)
   url      = env("DATABASE_URL")
 }
 ```
 
-Then run:
+Then run migrations:
 ```bash
 npx prisma migrate dev --name migrate_to_postgres
 ```
