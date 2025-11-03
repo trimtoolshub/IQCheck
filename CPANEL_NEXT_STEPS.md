@@ -86,6 +86,15 @@ npm exec prisma generate
 
 **This is the easiest!** `npm exec` is built into npm and should work immediately.
 
+**⚠️ If you get "WebAssembly Out of Memory" error:**
+```bash
+cd ~/trimsoftstudio.com/iqcheck
+NODE_OPTIONS="--max-old-space-size=4096" npm exec prisma generate
+NODE_OPTIONS="--max-old-space-size=4096" npm exec prisma migrate deploy
+```
+
+See `CPANEL_WEBASSEMBLY_MEMORY_FIX.md` for detailed solutions.
+
 See `CPANEL_NPX_FIX.md` or `CPANEL_NPX_NOT_FOUND.md` for more solutions.
 
 ### Step 7: Seed Database
