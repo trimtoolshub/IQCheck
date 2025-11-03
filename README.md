@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IQCheck
+
+A scientifically designed IQ test platform with adaptive testing, real-time scoring, and detailed cognitive insights.
+
+## Features
+
+- 🧠 **Adaptive Intelligence Testing** - Questions adjust based on your performance
+- 📊 **Real-time IQ Calculation** - See your percentile ranking in real-time
+- 💰 **Multiple Payment Options** - Stripe for international, JazzCash/EasyPaisa/PakPay for Pakistan
+- 📧 **Email Collection & Management** - Built-in email marketing system
+- 📱 **Mobile-First Design** - Optimized for all devices
+- 🔐 **Admin Dashboard** - Track revenue, manage emails, view statistics
 
 ## Getting Started
 
-First, run the development server:
+### Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Setup Database
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Run migrations
+npx prisma migrate dev
 
-## Learn More
+# Seed questions
+curl -X POST http://localhost:3000/api/dev/seed
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Create Admin User
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+curl -X POST http://localhost:3000/api/admin/create \
+  -H "Content-Type: application/json" \
+  -d '{"email": "your-admin-email@gmail.com"}'
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Documentation
+
+- **Quick Start**: See [QUICK_START.md](./QUICK_START.md)
+- **Deployment**: See [DEPLOY_QUICK_START.md](./DEPLOY_QUICK_START.md)
+- **Admin Setup**: See [ADMIN_SETUP.md](./ADMIN_SETUP.md)
+- **Stripe Setup**: See [STRIPE_SETUP.md](./STRIPE_SETUP.md)
+- **Pakistani Payments**: See [PAKISTAN_PAYMENT_SETUP.md](./PAKISTAN_PAYMENT_SETUP.md)
+
+## Tech Stack
+
+- **Next.js 16** - React framework
+- **Prisma** - Database ORM
+- **NextAuth.js** - Authentication
+- **Stripe** - International payments
+- **SQLite/PostgreSQL** - Database
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [DEPLOY_QUICK_START.md](./DEPLOY_QUICK_START.md) for detailed deployment instructions.
