@@ -10,24 +10,29 @@ This happens because **Prisma is trying to load WebAssembly modules** but the se
 
 ## Solutions
 
-### Solution 1: Increase Node.js Memory Limit (Recommended) ✅
+### Solution 1: Set NODE_OPTIONS in Terminal (CRITICAL) ✅
 
-Set a higher memory limit for Node.js:
+**Important:** NODE_OPTIONS in cPanel environment variables **only applies to the running app**, not Terminal commands!
+
+**You MUST export it in Terminal:**
 
 ```bash
 cd ~/trimsoftstudio.com/iqcheck
-NODE_OPTIONS="--max-old-space-size=4096" npm exec prisma migrate deploy
-NODE_OPTIONS="--max-old-space-size=4096" npm exec prisma generate
+export NODE_OPTIONS="--max-old-space-size=4096"
+npm exec prisma generate
+npm exec prisma migrate deploy
 ```
 
-Or export it first:
+Or inline with each command:
 ```bash
-export NODE_OPTIONS="--max-old-space-size=4096"
-npm exec prisma migrate deploy
-npm exec prisma generate
+cd ~/trimsoftstudio.com/iqcheck
+NODE_OPTIONS="--max-old-space-size=4096" npm exec prisma generate
+NODE_OPTIONS="--max-old-space-size=4096" npm exec prisma migrate deploy
 ```
 
 **4096 MB = 4 GB** - adjust based on your server's available memory.
+
+**See `CPANEL_NODE_OPTIONS_TERMINAL.md` for detailed explanation.**
 
 ### Solution 2: Use Full Path with Memory Option
 
