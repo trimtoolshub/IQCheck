@@ -133,6 +133,26 @@ npm exec prisma --version
 
 If this works without memory error, the setting is correct!
 
+## If Still Getting Memory Errors
+
+**If you've exported NODE_OPTIONS but still get memory errors:**
+
+1. **Check available memory:**
+   ```bash
+   free -h
+   ```
+
+2. **Try static binary instead of WebAssembly:**
+   ```bash
+   export PRISMA_CLI_BINARY_TYPE=static
+   export NODE_OPTIONS="--max-old-space-size=4096"
+   npm exec prisma generate
+   ```
+
+3. **Or generate Prisma client locally** and upload to server
+
+**See `CPANEL_MEMORY_STILL_FAILING.md` for detailed solutions.**
+
 ## Summary
 
 **The NODE_OPTIONS in cPanel environment variables only applies to the running Node.js app, not Terminal commands.**
@@ -146,5 +166,5 @@ export NODE_OPTIONS="--max-old-space-size=4096"
 npm exec prisma generate
 ```
 
-This should work! 🎉
+**If still failing, try static binary or generate locally.** 🎉
 
