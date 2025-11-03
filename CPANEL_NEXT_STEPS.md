@@ -60,11 +60,31 @@ npm run build
 
 ### Step 6: Setup Database
 
+**If you get "npx: command not found":**
+
+**Option A: Use full path (easiest):**
 ```bash
+cd ~/trimsoftstudio.com/iqcheck
+/home/rungrezc/nodevenv/trimsoftstudio.com/iqcheck/20/bin/npx prisma migrate deploy
+/home/rungrezc/nodevenv/trimsoftstudio.com/iqcheck/20/bin/npx prisma generate
+```
+
+**Option B: Add Node.js to PATH:**
+```bash
+export PATH="/home/rungrezc/nodevenv/trimsoftstudio.com/iqcheck/20/bin:$PATH"
 cd ~/trimsoftstudio.com/iqcheck
 npx prisma migrate deploy
 npx prisma generate
 ```
+
+**Option C: Use npm exec:**
+```bash
+cd ~/trimsoftstudio.com/iqcheck
+npm exec prisma migrate deploy
+npm exec prisma generate
+```
+
+See `CPANEL_NPX_FIX.md` for more solutions.
 
 ### Step 7: Seed Database
 
