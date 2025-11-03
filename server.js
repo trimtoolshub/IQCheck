@@ -6,6 +6,9 @@ const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTNAME || 'localhost';
 const port = parseInt(process.env.PORT || '3000', 10);
 
+// Base path for subdirectory deployment (e.g., /iqcheck)
+const basePath = process.env.BASE_PATH || '/iqcheck';
+
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
@@ -13,7 +16,22 @@ app.prepare().then(() => {
   createServer(async (req, res) => {
     try {
       const parsedUrl = parse(req.url, true);
-      await handle(req, res, parsedUrl);
+      
+      // Strip base path from URL if it exists
+      // cPanel might pass /iqcheck/... but Next.js expects /...
+      let pathname = parsedUrl.pathname || '/';
+      if (pathname.startsWith(basePath)) {
+        pathname = pathname.slice(basePath.length) || '/';
+      }
+      
+      // Create new parsed URL with corrected pathname
+      const correctedUrl = {
+        ...parsedUrl,
+        pathname: pathname,
+        path: pathname + (parsedUrl.search || '')
+      };
+      
+      await handle(req, res, correctedUrl);
     } catch (err) {
       console.error('Error occurred handling', req.url, err);
       res.statusCode = 500;
@@ -22,6 +40,7 @@ app.prepare().then(() => {
   }).listen(port, (err) => {
     if (err) throw err;
     console.log(`> Ready on http://${hostname}:${port}`);
+    console.log(`> Base path: ${basePath}`);
   });
 });
 
