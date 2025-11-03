@@ -6,10 +6,9 @@ const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTNAME || 'localhost';
 const port = parseInt(process.env.PORT || '3000', 10);
 
-// Base path for subdirectory deployment (e.g., /iqcheck)
-const basePath = process.env.BASE_PATH || '/iqcheck';
+const basePath = '/iqcheck';
 
-const app = next({ dev, hostname, port });
+const app = next({ dev, hostname, port, basePath });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
@@ -18,7 +17,7 @@ app.prepare().then(() => {
       const parsedUrl = parse(req.url, true);
       
       // Strip base path from URL if it exists
-      // cPanel might pass /iqcheck/... but Next.js expects /...
+      // Request comes as /iqcheck/... but Next.js with basePath expects /...
       let pathname = parsedUrl.pathname || '/';
       if (pathname.startsWith(basePath)) {
         pathname = pathname.slice(basePath.length) || '/';
@@ -39,8 +38,7 @@ app.prepare().then(() => {
     }
   }).listen(port, (err) => {
     if (err) throw err;
-    console.log(`> Ready on http://${hostname}:${port}`);
-    console.log(`> Base path: ${basePath}`);
+    console.log(`> Ready on http://${hostname}:${port}${basePath}`);
   });
 });
 
