@@ -1,8 +1,11 @@
-# Fix Node.js Version Error
+# ⚠️ CRITICAL: Fix Node.js Version Error
 
 ## The Problem
 
 Error: Node.js version **10.24.1** is too old!
+
+**Your path shows**: `/home/rungrezc/nodevenv/trimsoftstudio.com/iqcheck/10`  
+**The `/10/` means you're using Node.js 10!** ❌
 
 Your application requires:
 - **Next.js 16.0.1** needs: Node.js >= 20.9.0
