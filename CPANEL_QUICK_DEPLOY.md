@@ -16,10 +16,13 @@ I can see your cPanel has:
 
 ### Step 1: Upload Files via Git
 
-**Option A: Use Terminal (Recommended)**
+**Option A: Make Repo Public (Easiest)**
 
-1. **Click "Terminal"** (in Advanced section)
-2. **Run these commands:**
+1. **Go to GitHub**: https://github.com/trimtoolshub/IQCheck/settings
+2. **Scroll down to "Danger Zone"**
+3. **Click "Change visibility"** → **"Make public"**
+4. **Confirm** the change
+5. **Then in Terminal** (in Advanced section):
    ```bash
    cd ~/trimsoftstudio.com
    git clone https://github.com/trimtoolshub/IQCheck.git
@@ -27,6 +30,26 @@ I can see your cPanel has:
    cp -r IQCheck/iq-app/* iqcheck/
    cd iqcheck
    ```
+
+**Option A2: Use Personal Access Token (If repo stays private)**
+
+1. **Create GitHub Personal Access Token:**
+   - Go to https://github.com/settings/tokens
+   - Click "Generate new token (classic)"
+   - Name it: "cPanel Deployment"
+   - Select scope: `repo` (full control of private repositories)
+   - Click "Generate token"
+   - **Copy the token** (you'll only see it once!)
+
+2. **In Terminal, use token for cloning:**
+   ```bash
+   cd ~/trimsoftstudio.com
+   git clone https://YOUR_TOKEN@github.com/trimtoolshub/IQCheck.git
+   mkdir -p iqcheck
+   cp -r IQCheck/iq-app/* iqcheck/
+   cd iqcheck
+   ```
+   (Replace `YOUR_TOKEN` with your actual token)
 
 **Option B: Use cPanel Git (if repo is public)**
 
@@ -39,27 +62,63 @@ I can see your cPanel has:
    - **Repository Branch**: `main`
 5. **Click "Create"**
 
-**Option C: Upload via File Manager**
+**Option C: Download ZIP and Upload (No Git Needed - RECOMMENDED)**
 
-1. **Download ZIP from GitHub**: Go to https://github.com/trimtoolshub/IQCheck → Code → Download ZIP
-2. **In cPanel File Manager**, navigate to `trimsoftstudio.com`
-3. **Upload the ZIP file**
-4. **Extract** it
-5. **Create folder `iqcheck`** (if it doesn't exist)
-6. **Copy `iq-app` folder contents** to `trimsoftstudio.com/iqcheck`
+This avoids all authentication issues!
 
-### Step 2: Copy Files to Destination (If using Option A, skip this)
+1. **Download ZIP from GitHub:**
+   - Go to https://github.com/trimtoolshub/IQCheck
+   - Click green **"Code"** button
+   - Click **"Download ZIP"**
+   - Save the ZIP file to your computer
 
-If you used **Option A** (Terminal), you're already done!
+2. **Upload via cPanel File Manager:**
+   - In cPanel, click **"File Manager"** (Files section)
+   - Navigate to `trimsoftstudio.com` folder
+   - Click **"Upload"** (top toolbar)
+   - Select your downloaded ZIP file
+   - Wait for upload to complete
 
-If you used **Option B** (cPanel Git), run in Terminal:
+3. **Extract and Setup:**
+   - **Right-click** the ZIP file → **"Extract"**
+   - This creates `IQCheck-main` folder
+   - **Create new folder** `iqcheck` (if it doesn't exist)
+   - **Navigate into** `IQCheck-main/iq-app`
+   - **Select all files** (Ctrl+A or Cmd+A)
+   - **Copy** them (Ctrl+C or Cmd+C)
+   - **Navigate to** `trimsoftstudio.com/iqcheck`
+   - **Paste** all files (Ctrl+V or Cmd+V)
+
+4. **In Terminal, verify:**
+   ```bash
+   cd ~/trimsoftstudio.com/iqcheck
+   ls -la
+   ```
+   (You should see files like `package.json`, `server.js`, etc.)
+
+### Step 2: Verify Files Are in Place
+
+**If you used Option A or A2:**
+```bash
+cd ~/trimsoftstudio.com/iqcheck
+ls -la
+```
+You should see `package.json`, `server.js`, `prisma/`, etc.
+
+**If you used Option B (cPanel Git), run in Terminal:**
 ```bash
 mkdir -p ~/trimsoftstudio.com/iqcheck
 cp -r ~/repositories/iqcheck/iq-app/* ~/trimsoftstudio.com/iqcheck/
 cd ~/trimsoftstudio.com/iqcheck
 ```
 
-If you used **Option C** (File Manager), files should already be in `trimsoftstudio.com/iqcheck`
+**If you used Option C (ZIP Upload):**
+Files should already be in `trimsoftstudio.com/iqcheck`
+Verify in Terminal:
+```bash
+cd ~/trimsoftstudio.com/iqcheck
+ls -la
+```
 
 ### Step 3: Install Dependencies
 
