@@ -30,14 +30,17 @@ npx prisma generate
 
 **Note**: This only works for the current Terminal session. If you close Terminal, you'll need to run this again.
 
-### Solution 3: Use npm exec Instead of npx
+### Solution 3: Use npm exec Instead of npx (RECOMMENDED) ✅
 
-`npm exec` is equivalent to `npx`:
+`npm exec` is equivalent to `npx` and built into npm:
 
 ```bash
+cd ~/trimsoftstudio.com/iqcheck
 npm exec prisma migrate deploy
 npm exec prisma generate
 ```
+
+**This should work immediately!** `npm` is available from your Node.js 20 installation, so `npm exec` should work even if `npx` doesn't.
 
 ### Solution 4: Navigate to Node.js bin Directory
 

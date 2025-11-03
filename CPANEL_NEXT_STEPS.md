@@ -77,14 +77,16 @@ npx prisma migrate deploy
 npx prisma generate
 ```
 
-**Option C: Use npm exec:**
+**Option C: Use npm exec (RECOMMENDED - Usually Works):**
 ```bash
 cd ~/trimsoftstudio.com/iqcheck
 npm exec prisma migrate deploy
 npm exec prisma generate
 ```
 
-See `CPANEL_NPX_FIX.md` for more solutions.
+**This is the easiest!** `npm exec` is built into npm and should work immediately.
+
+See `CPANEL_NPX_FIX.md` or `CPANEL_NPX_NOT_FOUND.md` for more solutions.
 
 ### Step 7: Seed Database
 
