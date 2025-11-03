@@ -16,23 +16,49 @@ I can see your cPanel has:
 
 ### Step 1: Upload Files via Git
 
-1. **Click "Git™ Version Control"** (in Files section)
-2. **Click "Create"** (top right)
-3. **Fill in:**
-   - **Repository URL**: `https://github.com/trimtoolshub/IQCheck.git`
-   - **Repository Path**: `/home/rungrezc/repositories/iqcheck`
-   - **Repository Branch**: `main`
-4. **Click "Create"**
-
-### Step 2: Copy Files to Public Directory
+**Option A: Use Terminal (Recommended)**
 
 1. **Click "Terminal"** (in Advanced section)
 2. **Run these commands:**
    ```bash
-   mkdir -p ~/public_html/iq-test
-   cp -r ~/repositories/iqcheck/iq-app/* ~/public_html/iq-test/
-   cd ~/public_html/iq-test
+   cd ~/public_html
+   git clone https://github.com/trimtoolshub/IQCheck.git
+   mkdir -p iq-test
+   cp -r IQCheck/iq-app/* iq-test/
+   cd iq-test
    ```
+
+**Option B: Use cPanel Git (if repo is public)**
+
+1. **Make sure your GitHub repo is PUBLIC** (Settings → Change visibility)
+2. **Click "Git™ Version Control"** (in Files section)
+3. **Click "Create"** (top right)
+4. **Fill in:**
+   - **Repository URL**: `https://github.com/trimtoolshub/IQCheck.git`
+   - **Repository Path**: `/home/rungrezc/repositories/iqcheck`
+   - **Repository Branch**: `main`
+5. **Click "Create"**
+
+**Option C: Upload via File Manager**
+
+1. **Download ZIP from GitHub**: Go to https://github.com/trimtoolshub/IQCheck → Code → Download ZIP
+2. **In cPanel File Manager**, navigate to `public_html`
+3. **Upload the ZIP file**
+4. **Extract** it
+5. **Copy `iq-app` folder contents** to `public_html/iq-test`
+
+### Step 2: Copy Files to Public Directory (If using Option A, skip this)
+
+If you used **Option A** (Terminal), you're already done!
+
+If you used **Option B** (cPanel Git), run in Terminal:
+```bash
+mkdir -p ~/public_html/iq-test
+cp -r ~/repositories/iqcheck/iq-app/* ~/public_html/iq-test/
+cd ~/public_html/iq-test
+```
+
+If you used **Option C** (File Manager), files should already be in `public_html/iq-test`
 
 ### Step 3: Install Dependencies
 
