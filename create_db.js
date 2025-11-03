@@ -1,7 +1,21 @@
 // Simple script to create database using Prisma Client
 // This bypasses Prisma CLI and WebAssembly memory issues
 
-const { PrismaClient } = require('./src/generated/prisma/client');
+// Try multiple paths for Prisma Client
+let PrismaClient;
+try {
+  // First try: @prisma/client from node_modules (standard location)
+  // This should work if npm install was run and Prisma client is in node_modules
+  PrismaClient = require('@prisma/client').PrismaClient;
+  console.log('✓ Using Prisma Client from node_modules/@prisma/client');
+} catch (e) {
+  console.error('❌ Cannot find Prisma Client:', e.message);
+  console.error('\n💡 Solution: You need to install dependencies first');
+  console.error('   Run: npm install');
+  console.error('\n   Or use the simpler script: node create_db_simple.js');
+  console.error('   (Uses sqlite3 directly, no Prisma Client needed)');
+  process.exit(1);
+}
 const fs = require('fs');
 const path = require('path');
 
