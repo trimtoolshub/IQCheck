@@ -21,11 +21,11 @@ I can see your cPanel has:
 1. **Click "Terminal"** (in Advanced section)
 2. **Run these commands:**
    ```bash
-   cd ~/public_html
+   cd ~/trimsoftstudio.com
    git clone https://github.com/trimtoolshub/IQCheck.git
-   mkdir -p iq-test
-   cp -r IQCheck/iq-app/* iq-test/
-   cd iq-test
+   mkdir -p iqcheck
+   cp -r IQCheck/iq-app/* iqcheck/
+   cd iqcheck
    ```
 
 **Option B: Use cPanel Git (if repo is public)**
@@ -42,29 +42,30 @@ I can see your cPanel has:
 **Option C: Upload via File Manager**
 
 1. **Download ZIP from GitHub**: Go to https://github.com/trimtoolshub/IQCheck → Code → Download ZIP
-2. **In cPanel File Manager**, navigate to `public_html`
+2. **In cPanel File Manager**, navigate to `trimsoftstudio.com`
 3. **Upload the ZIP file**
 4. **Extract** it
-5. **Copy `iq-app` folder contents** to `public_html/iq-test`
+5. **Create folder `iqcheck`** (if it doesn't exist)
+6. **Copy `iq-app` folder contents** to `trimsoftstudio.com/iqcheck`
 
-### Step 2: Copy Files to Public Directory (If using Option A, skip this)
+### Step 2: Copy Files to Destination (If using Option A, skip this)
 
 If you used **Option A** (Terminal), you're already done!
 
 If you used **Option B** (cPanel Git), run in Terminal:
 ```bash
-mkdir -p ~/public_html/iq-test
-cp -r ~/repositories/iqcheck/iq-app/* ~/public_html/iq-test/
-cd ~/public_html/iq-test
+mkdir -p ~/trimsoftstudio.com/iqcheck
+cp -r ~/repositories/iqcheck/iq-app/* ~/trimsoftstudio.com/iqcheck/
+cd ~/trimsoftstudio.com/iqcheck
 ```
 
-If you used **Option C** (File Manager), files should already be in `public_html/iq-test`
+If you used **Option C** (File Manager), files should already be in `trimsoftstudio.com/iqcheck`
 
 ### Step 3: Install Dependencies
 
 In Terminal:
 ```bash
-cd ~/public_html/iq-test
+cd ~/trimsoftstudio.com/iqcheck
 npm install
 npm run build
 ```
@@ -76,10 +77,10 @@ npm run build
 3. **Configure:**
    - **Node.js Version**: Select **18.x** or **20.x** (highest available)
    - **Application Mode**: **Production**
-   - **Application Root**: `/home/rungrezc/public_html/iq-test`
+   - **Application Root**: `/home/rungrezc/trimsoftstudio.com/iqcheck`
    - **Application URL**: 
-     - Option 1: Create subdomain `iq-test.rungrez.com` (create it first in Subdomains)
-     - Option 2: Use main domain `rungrez.com` (if you want it on main domain)
+     - Use domain: `iqcheck.trimsoftstudio.com` (create subdomain first if needed)
+     - Or main domain if configured
    - **Application Startup File**: `server.js`
 4. **Click "Create"**
 
@@ -100,7 +101,7 @@ npm run build
 
 In Terminal:
 ```bash
-cd ~/public_html/iq-test
+cd ~/trimsoftstudio.com/iqcheck
 npx prisma migrate deploy
 npx prisma generate
 ```
@@ -127,7 +128,7 @@ curl -X POST https://your-domain.com/api/dev/seed
 ## 📋 Checklist
 
 - [ ] Git repository cloned
-- [ ] Files copied to `~/public_html/iq-test`
+- [ ] Files copied to `~/trimsoftstudio.com/iqcheck`
 - [ ] Node.js app created
 - [ ] Environment variables set
 - [ ] Dependencies installed
@@ -140,12 +141,12 @@ curl -X POST https://your-domain.com/api/dev/seed
 ## 🎯 Your App URL
 
 After deployment, your app will be available at:
-- `https://iq-test.rungrez.com` (if using subdomain)
-- OR `https://rungrez.com` (if using main domain)
+- `https://iqcheck.trimsoftstudio.com` (if using subdomain)
+- OR `https://trimsoftstudio.com/iqcheck` (if using main domain)
 
 ## 💡 Tips
 
-1. **SQLite will work!** - Your database file will be at `/home/rungrezc/public_html/iq-test/prisma/dev.db`
+1. **SQLite will work!** - Your database file will be at `/home/rungrezc/trimsoftstudio.com/iqcheck/prisma/dev.db`
 
 2. **Backups** - cPanel automatically backs up files, including your SQLite database
 
@@ -164,8 +165,8 @@ After deployment, your app will be available at:
 
 **Database permissions?**
 ```bash
-chmod 644 ~/public_html/iq-test/prisma/dev.db
-chmod 755 ~/public_html/iq-test/prisma
+chmod 644 ~/trimsoftstudio.com/iqcheck/prisma/dev.db
+chmod 755 ~/trimsoftstudio.com/iqcheck/prisma
 ```
 
 Your app is ready for cPanel deployment! SQLite will work perfectly. 🎉
